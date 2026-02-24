@@ -1,98 +1,97 @@
-SSH Brute Force Detection Lab (Ubuntu + Kali)
+# SSH Brute Force Detection Lab (Ubuntu + Kali)
 
+---
 
-
-Objective
+## Objective
 
 Simulate an SSH brute-force attack in an isolated lab environment and detect the attack using system logs and packet-level analysis.
 
+---
 
+## Lab Environment
 
-Lab Environment
+- Target System: Ubuntu 24.04 (Host Machine)
 
--Target System: Ubuntu 24.04 (Host Machine)
+- Attacker System: Kali Linux (VirtualBox VM)
 
--Attacker System: Kali Linux (VirtualBox VM)
+- Network: Host-Only Adapter (192.168.56.0/24)
 
--Network: Host-Only Adapter (192.168.56.0/24)
+- Service Tested: OpenSSH (Port 22)
 
--Service Tested: OpenSSH (Port 22)
+---
 
-
-
-Attack Simulation
+## Attack Simulation
 
 Multiple SSH login attempts were initiated from Kali:
 
-ssh ashborn@192.168.56.1
+``` ssh ashborn@192.168.56.1 ```
 
 Incorrect passwords were entered repeatedly to simulate brute-force behavior.
 
+---
 
-
-Log-Based Detection
+## Log-Based Detection
 
 Authentication logs were analyzed using:
 
-sudo grep -a "Failed password" /var/log/auth.log
+``` sudo grep -a "Failed password" /var/log/auth.log ```
 
 Findings:
 
--Attacker IP: 192.168.56.102
+- Attacker IP: 192.168.56.102
 
--Total failed attempts: 30
+- Total failed attempts: 30
 
--Attack duration: ~30 seconds
+- Attack duration: ~30 seconds
 
--Pattern: 3 failed attempts per SSH session
+- Pattern: 3 failed attempts per SSH session
 
+---
 
-
-
-Packet-Level Correlation (Wireshark)
+## Packet-Level Correlation (Wireshark)
 
 Traffic was captured on vboxnet0 interface and filtered using:
 
-tcp.port == 22
+``` tcp.port == 22 ```
 
 Observed behavior:
 
--Multiple TCP sessions from attacker IP
+- Multiple TCP sessions from attacker IP
 
--Unique ephemeral source port per session
+- Unique ephemeral source port per session
 
--3 authentication attempts per TCP session
+- 3 authentication attempts per TCP session
 
--Connection termination after failed attempts
+- Connection termination after failed attempts
 
--New session initiated with new source port
+- New session initiated with new source port
 
 This confirms brute-force behavior at both application and network layers.
 
+---
 
+## Mitigation Recommendations
 
-Mitigation Recommendations
+- Implement Fail2Ban to block repeated authentication failures
 
--Implement Fail2Ban to block repeated authentication failures
+- Enforce SSH key-based authentication
 
--Enforce SSH key-based authentication
+- Restrict SSH access using firewall rules (UFW)
 
--Restrict SSH access using firewall rules (UFW)
+- Monitor authentication logs regularly
 
--Monitor authentication logs regularly
+---
 
+## Skills Demonstrated
 
+- Linux log analysis
 
-Skills Demonstrated
+- Pattern-based log parsing (grep, awk)
 
--Linux log analysis
+- SSH protocol understanding
 
--Pattern-based log parsing (grep, awk)
+- TCP handshake analysis
 
--SSH protocol understanding
+- Packet capture with Wireshark
 
--TCP handshake analysis
-
--Packet capture with Wireshark
-
--Correlation between application and network layers
+- Correlation between application and network layers
