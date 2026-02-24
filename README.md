@@ -2,6 +2,11 @@
 
 ---
 
+## Blue Team Workflow Demonstrated:
+Recon → Detection → Analysis → Mitigation → Validation
+
+---
+
 ## Objective
 
 Simulate an SSH brute-force attack in an isolated lab environment and detect the attack using system logs and packet-level analysis.
@@ -95,3 +100,21 @@ This confirms brute-force behavior at both application and network layers.
 - Packet capture with Wireshark
 
 - Correlation between application and network layers
+
+---
+
+## Defensive Validation
+
+Fail2Ban was implemented to automatically block repeated SSH authentication failures.
+
+After 3 failed login attempts:
+
+- Attacker IP was banned
+
+- SSH access was blocked
+
+- Connection refused observed from attacker system
+
+See detailed implementation and evidence in:
+
+``` analysis/findings.md```

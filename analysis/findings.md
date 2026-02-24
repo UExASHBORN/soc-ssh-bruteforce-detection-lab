@@ -134,3 +134,48 @@ If exposed to internet:
 
 - Monitor logs with centralized logging (SIEM)
 
+---
+
+## 9. Defensive Implementation – Fail2Ban Mitigation
+
+Objective
+
+Implement automated blocking for repeated SSH authentication failures.
+
+Configuration
+```
+sudo apt install fail2ban
+sudo nano /etc/fail2ban/jail.local
+```
+
+Configuration used:
+```
+[sshd]
+enabled = true
+maxretry = 3
+findtime = 60
+bantime = 300
+```
+
+Validation Test
+
+1.Initiated 3 failed SSH login attempts from Kali
+
+2.Checked jail status:
+
+```sudo fail2ban-client status sshd```
+
+Result:
+
+- Banned IP:```192.168.56.102```
+
+- Ban duration: 300 seconds
+
+- Security Impact
+
+- Prevents repeated brute-force attempts
+
+- Reduces attack window
+
+- Converts detection into automated response
+
