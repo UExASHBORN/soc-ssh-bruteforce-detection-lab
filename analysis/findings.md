@@ -10,7 +10,9 @@ Failed password for ashborn from 192.168.56.102 port XXXXX ssh2
 
 The attacker IP was consistently:
 
+```
 192.168.56.102
+```
 
 This IP corresponds to the Kali Linux VM in the Host-Only network (192.168.56.0/24).
 
@@ -20,7 +22,9 @@ This IP corresponds to the Kali Linux VM in the Host-Only network (192.168.56.0/
 
 Command used:
 
-``` sudo grep -a "Failed password" /var/log/auth.log | wc -l ```
+```
+sudo grep -a "Failed password" /var/log/auth.log | wc -l
+```
 
 Observed failed attempts: 30
 
@@ -34,7 +38,9 @@ From Wireshark capture:
 
 Filter used:
 
-``` tcp.port == 22 ```
+```
+tcp.port == 22
+```
 
 Observed behavior:
 
@@ -74,9 +80,7 @@ Examples observed:
 
 - 54948
 
-This is expected TCP behavior.
-
-The client OS assigns a new ephemeral source port for each new outgoing connection.
+Each new SSH session used a different ephemeral source port, indicating repeated connection attempts rather than a single persistent session.
 
 Destination port remained constant:
 
@@ -108,7 +112,7 @@ Network Layer:
 
 - Pattern of 3 failed attempts per session
 
-This confirms consistent behavior across log and packet capture evidence.
+Log and packet analysis aligned, confirming brute-force characteristics.
 
 ---
 
@@ -118,13 +122,11 @@ If exposed to internet:
 
 - System would be vulnerable to automated password brute-force
 
-- Without rate limiting or lockout, attacker could continue attempts indefinitely
+- Without automated response or rate limiting, attacker attempts would continue until manual intervention.
 
 ---
 
-## 8. Recommended Mitigations
-
-- Deploy Fail2Ban to block repeated failed login attempts
+## 8. Additional Hardening Considerations (Not Implemented in This Lab)
 
 - Disable password authentication (PasswordAuthentication no)
 
@@ -163,7 +165,9 @@ Validation Test
 
 2.Checked jail status:
 
-```sudo fail2ban-client status sshd```
+```
+sudo fail2ban-client status sshd
+```
 
 Result:
 

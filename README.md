@@ -9,7 +9,9 @@ Recon → Detection → Analysis → Mitigation → Validation
 
 ## Objective
 
-Simulate an SSH brute-force attack in an isolated lab environment and detect the attack using system logs and packet-level analysis.
+- Simulate an SSH brute-force attack in an isolated lab environment and detect the attack using system logs and packet-level analysis.
+
+- Result: Automated IP blocking triggered after 3 failed SSH authentication attempts. Verified through auth.log evidence and attacker-side connection refusal.
 
 ---
 
@@ -29,7 +31,9 @@ Simulate an SSH brute-force attack in an isolated lab environment and detect the
 
 Multiple SSH login attempts were initiated from Kali:
 
-``` ssh ashborn@192.168.56.1 ```
+```
+ ssh ashborn@192.168.56.1
+```
 
 Incorrect passwords were entered repeatedly to simulate brute-force behavior.
 
@@ -39,7 +43,9 @@ Incorrect passwords were entered repeatedly to simulate brute-force behavior.
 
 Authentication logs were analyzed using:
 
-``` sudo grep -a "Failed password" /var/log/auth.log ```
+``` 
+sudo grep -a "Failed password" /var/log/auth.log
+```
 
 Findings:
 
@@ -57,7 +63,9 @@ Findings:
 
 Traffic was captured on vboxnet0 interface and filtered using:
 
-``` tcp.port == 22 ```
+```
+tcp.port == 22
+```
 
 Observed behavior:
 
@@ -70,20 +78,6 @@ Observed behavior:
 - Connection termination after failed attempts
 
 - New session initiated with new source port
-
-This confirms brute-force behavior at both application and network layers.
-
----
-
-## Mitigation Recommendations
-
-- Implement Fail2Ban to block repeated authentication failures
-
-- Enforce SSH key-based authentication
-
-- Restrict SSH access using firewall rules (UFW)
-
-- Monitor authentication logs regularly
 
 ---
 
@@ -117,4 +111,6 @@ After 3 failed login attempts:
 
 See detailed implementation and evidence in:
 
-``` analysis/findings.md```
+```
+analysis/findings.md
+```
